@@ -1,0 +1,112 @@
+March 19, 2024
+Complete ASTARIA interview, get requirements for Whitelist NFT Mint project
+Consume Youtube, Blogs, Docs and GitHub Repo on ERC721A
+
+March 20, 2024
+ERC721 docs are common but not ERC721A
+Need to figure out how to make a Whitelist
+Discover Merkle Tree whitelist method
+Research SHA256 hashing with decentralized apps
+
+March 21, 2024
+Look for base contract template using ERC721A
+Found one from "Inverted Mfers"
+Figure out how Remix works to test different functions
+Still need to change things around and figure how to add merkle root hash proof
+
+March 22, 2024
+Got base contract to work with merkleroot inside constructor which is used in whitelistmint functions
+When you run mint(with merkle proof) it properly maps to the whitelist addresses of my Remix
+Still wondering if this is actually using the mint inside ERC721A because my supply isnt changing
+
+March 23, 2024
+Starting with working contract with merkle list
+Applying logic for ASTARIA requirements
+Need to see how to implement ownerOf()?
+How do i Know its using the ERC721A gas optimized characteristics of ERC721A???
+We have the verification from whitelist, need to implement the actuall minting.
+
+Got a working copy of the contract
+
+fufills requirements from ASTARIA
+-can deploy with merkleproof
+-can mint to whitelist addresses
+-can only mint once
+-not on list == cant mint
+
+TESTS for gas
+I have 4 addresses on my remix that I am minting from
+mintint 1 each time, one address at a time
+
+1.
+gas --> 162513
+tx --> 135715
+exc --> 116031
+
+2.
+gas --> 142864
+tx --> 118629
+exc --> 98921
+
+3.
+gas --> 142875
+tx --> 118639
+exc --> 98931
+
+4.
+gas --> 142887
+tx --> 118649 
+exc --> 98941 
+
+//total supply now 4
+
+TESTs for minting multiple NFTs in one got
+-minting 10 with each address
+-********BUG********* why can I mint 10 for the same 1000 finney, wouldnt it be 10000 for 10???
+
+1.
+gas --> 182468 
+tx -->  153067 
+exc -->  133383 
+
+2. 
+gas -->  162819 
+tx -->   135981 
+exc -->   116273 
+
+March 24, 2024
+Troubleshooting the value sent with the mint function.
+my cost is .1 ether per mint
+.1 ether = 1000 finney
+
+My math for the total cost in chcek cost was wrong.
+
+Also .1 ether is 100 finney. thats why my 10 batch mint was going through
+for 1000 finney when i was expecting it to be 10,000 finney
+
+BACK TO TESTING BATCH GAS OPTIMIZATIONS
+-test 1 mint on each address to see transaction gas cost
+
+1. tx --> 135715
+2. tx --> 118629
+3. tx --> 118639
+4. tx --> 118649
+
+-now batch test minting 10 each time for 4 addresses. total value = 1000 finney each time
+
+1. tx --> 153067
+2. tx --> 135981
+3. tx --> 135991
+4. tx --> 136001
+
+Need to test what happens if someone tries to mint 666 tokens at one time.
+--out of range
+
+Set a MAX_BATCH size of 20
+
+TAKE CONTRACT FROM REMIX AND INITIALIZE FORGE TEST SUITE
+-Write tests for Coolios contract
+-started write some test for forge using the merkletree - not done
+-need to see what tests we actually need
+
+March 25, 2024
