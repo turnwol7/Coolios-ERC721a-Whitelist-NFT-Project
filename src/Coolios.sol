@@ -79,7 +79,7 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
 
     // checks if address is on our whitelist (getMerkleRoot.js)
     modifier checkWhitelisted(bytes32[] memory proof) {
-        require(proof.verify(MerkleRoot, keccak256(abi.encodePacked(msg.sender))), "Not whitelisted");
+        require(proof.verify(MerkleRoot, keccak256(abi.encodePacked(msg.sender))), "Not whitelisted!!!!!");
         _;
     }
 
