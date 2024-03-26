@@ -110,3 +110,6 @@ TAKE CONTRACT FROM REMIX AND INITIALIZE FORGE TEST SUITE
 -need to see what tests we actually need
 
 March 25, 2024
+writing tests for contract.
+new problem
+how to take list of addresses, and cross reference them to the 2D array of proofs generated for those addresses?
