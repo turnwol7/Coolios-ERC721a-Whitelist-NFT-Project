@@ -99,17 +99,32 @@ BACK TO TESTING BATCH GAS OPTIMIZATIONS
 3. tx --> 135991
 4. tx --> 136001
 
+pretty much same gas for minting 1 or 10 at time. cool.
+
 Need to test what happens if someone tries to mint 666 tokens at one time.
 --out of range
 
 Set a MAX_BATCH size of 20
+thats all they can mint if we use a whitelist technically.
 
 TAKE CONTRACT FROM REMIX AND INITIALIZE FORGE TEST SUITE
+
 -Write tests for Coolios contract
 -started write some test for forge using the merkletree - not done
 -need to see what tests we actually need
+-look at Foundry to learn what I'm doing 
 
 March 25, 2024
 writing tests for contract.
 new problem
 how to take list of addresses, and cross reference them to the 2D array of proofs generated for those addresses?
+
+March 26, 2024
+Got the setup() in the test to run the constructor
+-working on getting the mint function to test pass
+-Should I hardcode the whitelist addresses inside the test file? seems like a good idea.
+-Problems with getting the Mint(proof, quantity) to accept the proofs to run the mint even though it is all tested in remix.
+
+Reading the Foundry Book
+figured out forge test -vvvvv might give me more information why my mint test keeps failing
+

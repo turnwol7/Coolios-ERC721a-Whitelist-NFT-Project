@@ -7,14 +7,14 @@ import { Coolios } from "../src/Coolios.sol";
 contract CooliosFuzzTest is Test {
     Coolios public coolios;
 
-    address[] private whitelistAddresses = [
+    address[] public whitelistAddresses = [
         0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,
         0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db,
         0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB,
         0x617F2E2fD72FD9D5503197092aC168c91465E7f2
     ];
 
-    bytes32[][] private proofs = [
+    bytes32[][] public proofs = [
         [bytes32(0x04a10bfd00977f54cc3450c9b25c9b3a502a089eba0097ba35fc33c4ea5fcb54), 
         bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)],
 
@@ -34,22 +34,22 @@ contract CooliosFuzzTest is Test {
         coolios = new Coolios(baseURI, merkleRoot);
     }
 
-    // function testMint() public {
-    //     // Iterate over each address in the whitelist and mint for each
-    //     for (uint i = 0; i < whitelistAddresses.length; i++) {
+    function testMint() public {
+        // Iterate over each address in the whitelist and mint for each
+        for (uint i = 0; i < whitelistAddresses.length; i++) {
             
-    //         address account = whitelistAddresses[i];
+            address account = whitelistAddresses[i];
 
-    //         bytes32[] memory proof = proofs[i];
+         //   bytes32[] memory proof = proofs[i];
            
 
-    //         // Verify the minting process
-    //         uint256 initialBalance = coolios.balanceOf(account);
-    //         coolios.mint{value: 0.1 ether}(proof, 1);
-    //         uint256 finalBalance = coolios.balanceOf(account);
+            // Verify the minting process
+            uint256 initialBalance = coolios.balanceOf(account);
+            coolios.mint{value: 0.1 ether}(proofs[i], 1);
+            uint256 finalBalance = coolios.balanceOf(account);
 
-    //         // Assert that the balance increased by 1 after minting
-    //         assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
-    //     }
-    // }
+            // Assert that the balance increased by 1 after minting
+            assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
+        }
+    }
 }
