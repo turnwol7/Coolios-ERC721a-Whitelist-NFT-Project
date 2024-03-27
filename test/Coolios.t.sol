@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { Test, console } from "../lib/forge-std/src/Test.sol";
-import { Coolios } from "../src/Coolios.sol";
+import {Test, console} from "../lib/forge-std/src/Test.sol";
+import {Coolios} from "../src/Coolios.sol";
+import "../lib/forge-std/src/StdCheats.sol";
 
 contract CooliosFuzzTest is Test {
     Coolios public coolios;
@@ -14,19 +15,28 @@ contract CooliosFuzzTest is Test {
         0x617F2E2fD72FD9D5503197092aC168c91465E7f2
     ];
 
-    bytes32[][] public proofs = [
-        [bytes32(0x04a10bfd00977f54cc3450c9b25c9b3a502a089eba0097ba35fc33c4ea5fcb54), 
-        bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)],
+   bytes32[][] public proofs = [
+    [
+        bytes32(0x04a10bfd00977f54cc3450c9b25c9b3a502a089eba0097ba35fc33c4ea5fcb54),
+        bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)
+    ],
+    [
+        bytes32(0x999bf57501565dbd2fdcea36efa2b9aef8340a8901e3459f4a4c926275d36cdb),
+        bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)
+    ],
+    [
+        bytes32(0xf6d82c545c22b72034803633d3dda2b28e89fb704f3c111355ac43e10612aedc),
+        bytes32(0x39a01635c6a38f8beb0adde454f205fffbb2157797bf1980f8f93a5f70c9f8e6)
+    ],
+    [
+        bytes32(0xdfbe3e504ac4e35541bebad4d0e7574668e16fefa26cd4172f93e18b59ce9486),
+        bytes32(0x39a01635c6a38f8beb0adde454f205fffbb2157797bf1980f8f93a5f70c9f8e6)
+    ]
+];
 
-        [bytes32(0x999bf57501565dbd2fdcea36efa2b9aef8340a8901e3459f4a4c926275d36cdb), 
-        bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)],
-
-        [bytes32(0xf6d82c545c22b72034803633d3dda2b28e89fb704f3c111355ac43e10612aedc), 
-        bytes32(0x39a01635c6a38f8beb0adde454f205fffbb2157797bf1980f8f93a5f70c9f8e6)],
-
-        [bytes32(0xdfbe3e504ac4e35541bebad4d0e7574668e16fefa26cd4172f93e18b59ce9486), 
-        bytes32(0x39a01635c6a38f8beb0adde454f205fffbb2157797bf1980f8f93a5f70c9f8e6)]
-    ];
+    address bob = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
+    
+  //  CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     function setUp() public {
         string memory baseURI = "https://example.com/";
@@ -34,22 +44,27 @@ contract CooliosFuzzTest is Test {
         coolios = new Coolios(baseURI, merkleRoot);
     }
 
-    // function testMint() public {
-    //     // Iterate over each address in the whitelist and mint for each
-    //     for (uint i = 0; i < whitelistAddresses.length; i++) {
-            
-    //         address account = whitelistAddresses[i];
+    //tests for the contract below
+    function testNameIsCoolios() public view {
+        assertEq(coolios.name(), "Coolios");
+    }
 
-    //         bytes32[] memory proof = proofs[i];
-           
+    //test for the msg.sender
+    function test_MintingCoolios() public{
+        for (uint256 i = 0; i <= whitelistAddresses.length; i++) {
+        
+        //hoax(whitelistAddresses[i], 1);
+        vm.deal(whitelistAddresses[i], 1);
+        vm.prank(whitelistAddresses[i]);
 
-    //         // Verify the minting process
-    //         uint256 initialBalance = coolios.balanceOf(account);
-    //         coolios.mint{value: 0.1 ether}(proof, 1);
-    //         uint256 finalBalance = coolios.balanceOf(account);
-
-    //         // Assert that the balance increased by 1 after minting
-    //         assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
-    //     }
-    // }
+        emit log_address(msg.sender);
+        coolios.mint{value: 0.1 ether}(proofs[i],1);
+        
+        assertEq(coolios.totalSupply(), 1);
+        //assertEq(whitelistMint.totalSupply(), 1);
+        
+        
+        
+        }
+    }
 }
