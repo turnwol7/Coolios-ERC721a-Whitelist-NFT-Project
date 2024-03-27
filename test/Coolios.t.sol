@@ -34,22 +34,33 @@ contract CooliosFuzzTest is Test {
         coolios = new Coolios(baseURI, merkleRoot);
     }
 
-    // function testMint() public {
-    //     // Iterate over each address in the whitelist and mint for each
-    //     for (uint i = 0; i < whitelistAddresses.length; i++) {
-            
-    //         address account = whitelistAddresses[i];
+   function testMint() public {
+    for (uint i = 0; i < whitelistAddresses.length; i++) {
+        address account = whitelistAddresses[i];
+        bytes32[] memory proof = proofs[i];
 
-    //         bytes32[] memory proof = proofs[i];
-           
+        // Log the address attempting to mint
+        console.log("Attempting to mint for address:", account);
 
-    //         // Verify the minting process
-    //         uint256 initialBalance = coolios.balanceOf(account);
-    //         coolios.mint{value: 0.1 ether}(proof, 1);
-    //         uint256 finalBalance = coolios.balanceOf(account);
+        uint256 initialBalance = coolios.balanceOf(account);
 
-    //         // Assert that the balance increased by 1 after minting
-    //         assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
-    //     }
-    // }
+        // Simulate transaction from the whitelisted account
+        vm.startPrank(account);
+
+        try coolios.mint{value: 0.1 ether}(proof, 1) {
+            // If minting succeeds, log success
+            console.log("Mint succeeded for address:", account);
+        } catch {
+            // If minting fails, log failure
+            console.log("Mint failed for address:", account);
+        }
+
+        vm.stopPrank();
+        uint256 finalBalance = coolios.balanceOf(account);
+
+        // Assert that the balance increased by 1 after minting
+        // This assertion will not be reached if minting fails, due to the try-catch block
+        assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
+        }
+    }
 }
