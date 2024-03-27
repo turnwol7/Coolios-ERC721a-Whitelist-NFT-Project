@@ -128,3 +128,6 @@ Got the setup() in the test to run the constructor
 Reading the Foundry Book
 figured out forge test -vvvvv might give me more information why my mint test keeps failing
 
+msg.sender gets set as "default sender"
+
+I need it to be the whitelist address...

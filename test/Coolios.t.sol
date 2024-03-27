@@ -34,22 +34,35 @@ contract CooliosFuzzTest is Test {
         coolios = new Coolios(baseURI, merkleRoot);
     }
 
+    
+
+   
+
     function testMint() public {
-        // Iterate over each address in the whitelist and mint for each
-        for (uint i = 0; i < whitelistAddresses.length; i++) {
-            
-            address account = whitelistAddresses[i];
+    // Iterate over each address in the whitelist and mint for each
+    for (uint i = 0; i < whitelistAddresses.length; i++) {
+        address account = whitelistAddresses[i];
+        
+        // Set msg.sender to the current whitelist address
+        // by using address(this)
+        address originalSender = address(this);
+        msg.sender = account;
 
-         //   bytes32[] memory proof = proofs[i];
-           
+        // Verify the minting process
+        uint256 initialBalance = coolios.balanceOf(account);
+        coolios.mint{value: 0.1 ether}(proofs[i], 1);
+        uint256 finalBalance = coolios.balanceOf(account);
 
-            // Verify the minting process
-            uint256 initialBalance = coolios.balanceOf(account);
-            coolios.mint{value: 0.1 ether}(proofs[i], 1);
-            uint256 finalBalance = coolios.balanceOf(account);
+        // Assert that the balance increased by 1 after minting
+        assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
 
-            // Assert that the balance increased by 1 after minting
-            assertEq(finalBalance - initialBalance, 1, "Incorrect minting");
-        }
+        // Restore the original msg.sender
+        msg.sender = originalSender;
     }
+}
+
+
+
+
+
 }
