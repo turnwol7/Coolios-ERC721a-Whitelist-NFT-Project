@@ -34,7 +34,6 @@ contract CooliosFuzzTest is Test {
     ]
 ];
 
-    address bob = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
     
   //  CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
@@ -49,22 +48,32 @@ contract CooliosFuzzTest is Test {
         assertEq(coolios.name(), "Coolios");
     }
 
+
     //test for the msg.sender
     function test_MintingCoolios() public{
         for (uint256 i = 0; i <= whitelistAddresses.length; i++) {
         
-        //hoax(whitelistAddresses[i], 1);
-        vm.deal(whitelistAddresses[i], 1);
-        vm.prank(whitelistAddresses[i]);
 
         emit log_address(msg.sender);
+        vm.deal(whitelistAddresses[i], 1);
+        vm.prank(whitelistAddresses[i]);
         coolios.mint{value: 0.1 ether}(proofs[i],1);
         
-        assertEq(coolios.totalSupply(), 1);
-        //assertEq(whitelistMint.totalSupply(), 1);
-        
-        
-        
+        assert(msg.sender == whitelistAddresses[i]);    
+
         }
     }
+
+    function test_msgSender() public {
+        address USER1 = address(1);
+        vm.startPrank(USER1);
+        coolios.doStuff();
+        //console.log_address(msg.sender);
+        //emit log_address(msg.sender);
+        vm.stopPrank();
+        // should fail       
+        assert(msg.sender == USER1 );
+    }
+
+
 }

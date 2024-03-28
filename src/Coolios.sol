@@ -77,6 +77,12 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
     // Addresses that are on the whitelist can only mint once
     // Addresses that are not on the whitelist cannot mint
 
+    //only used for testing the msg.sender
+    function doStuff() public {
+    //console.log("msg.sender from contract", msg.sender);
+    //emit log_address(msg.sender);
+    }
+
     // checks if address is on our whitelist (getMerkleRoot.js)
     modifier checkWhitelisted(bytes32[] memory proof) {
         require(proof.verify(MerkleRoot, keccak256(abi.encodePacked(msg.sender))), "Not whitelisted!!!!!");
