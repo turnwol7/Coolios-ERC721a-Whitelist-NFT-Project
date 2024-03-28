@@ -131,3 +131,12 @@ figured out forge test -vvvvv might give me more information why my mint test ke
 msg.sender gets set as "default sender"
 
 I need it to be the whitelist address...
+
+March 27, 28, 2024
+-Still troubleshooting why my test cast for the mint function in smart contract wont pass
+-i need the "msg.sender" to change based on what whitelistAddress[i] we are looping thgouh
+-the default address WILL NOT change even when I prank or hoax it in Foundry
+
+-partial fix
+-I made a function in the contract to  return _msgSenderERC721A() and then use that over in the test.
+-now it emits Transfer to the correct msg.sender but hits a [45] CooliosFuzzTest::fallback{value: 100000000000000000}() and reverts to fail...

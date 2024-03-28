@@ -51,29 +51,23 @@ contract CooliosFuzzTest is Test {
 
     //test for the msg.sender
     function test_MintingCoolios() public{
-        for (uint256 i = 0; i <= whitelistAddresses.length; i++) {
+        for (uint256 i = 0; i < whitelistAddresses.length; i++) {
         
+        vm.deal(whitelistAddresses[i], .5 ether);
+        vm.startPrank(whitelistAddresses[i]);
 
-        emit log_address(msg.sender);
-        vm.deal(whitelistAddresses[i], 1);
-        vm.prank(whitelistAddresses[i]);
-        coolios.mint{value: 0.1 ether}(proofs[i],1);
+        address _testAddr = coolios.getMsgSenderFromCoolios(); 
+
+        //assert that the address is the same as the whitelist address
+        assertEq(_testAddr, whitelistAddresses[i]);
+
+         
+       coolios.mint{value: 100000000000000000 }(proofs[i], 1);
         
-        assert(msg.sender == whitelistAddresses[i]);    
-
+        vm.stopPrank();
         }
     }
 
-    function test_msgSender() public {
-        address USER1 = address(1);
-        vm.startPrank(USER1);
-        coolios.doStuff();
-        //console.log_address(msg.sender);
-        //emit log_address(msg.sender);
-        vm.stopPrank();
-        // should fail       
-        assert(msg.sender == USER1 );
-    }
 
 
 }
