@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8.0;
+pragma solidity >=0.8.0;
 
 import "lib/ERC721A/contracts/ERC721A.sol";
 
@@ -8,8 +8,10 @@ import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import "lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol";
 
-// ASTARIA INTERVIEW - JUSTIN BISHOP - March 19, 2024
+// ASTARIA INTERVIEW - JUSTIN BISHOP - March 19 to March 29, 2024
 // This contract is a ERC721A contract that allows for the minting of tokens from a whitelist
+
+// The contract has the following features:
 
 // Only addresses that are on the whitelist can mint tokens
 // Addresses that are on the whitelist can only mint once
@@ -17,7 +19,6 @@ import "lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol"
 
 contract Coolios is ERC721A, Ownable, ReentrancyGuard {
 
-    // FIELDS
     // Base URI for the token
     string private _baseURI_;
     // Base URI for the token PLUS token ID as string for URL
@@ -37,12 +38,11 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
     // 0x0x0x0x0x0x0x0x0x0x0x0x0
 
     // merkle root determines who can mint
-    constructor(string memory baseURI, bytes32 Root)
-        ERC721A("Coolios", "COOL")
-        Ownable(msg.sender)
-        
-    {
-        require(Root != bytes32(0), "Empty Root");        
+    constructor(
+        string memory baseURI,
+        bytes32 Root
+    ) ERC721A("Coolios", "COOL") Ownable(msg.sender) {
+        require(Root != bytes32(0), "Empty Root");
         MerkleRoot = Root;
         _baseURI_ = baseURI;
     }
@@ -51,11 +51,12 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
     // MINT FUNCITON
     // 0x0x0x0x0x0x0x0x0x0x0x0x0
 
-    function mint(bytes32[] memory proof, uint8 quantity)
-
+    function mint(
+        bytes32[] memory proof,
+        uint8 quantity
+    )
         external
         payable
-        
         checkWhitelisted(proof)
         canMintOnlyOnce
         supplyCheck(quantity)
@@ -78,17 +79,18 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
     // Addresses that are not on the whitelist cannot mint
 
     //only used for testing the msg.sender in Coolios.t.sol
-    function getMsgSenderFromCoolios() public view returns (address){
-    return _msgSenderERC721A();
+    function getMsgSenderFromCoolios() public view returns (address) {
+        return _msgSenderERC721A();
     }
 
     //testing function used to get the address of the contract
 
-
-
     // checks if address is on our whitelist (getMerkleRoot.js)
     modifier checkWhitelisted(bytes32[] memory proof) {
-        require(proof.verify(MerkleRoot, keccak256(abi.encodePacked(msg.sender))), "Not whitelisted!!!!!");
+        require(
+            proof.verify(MerkleRoot, keccak256(abi.encodePacked(msg.sender))),
+            "Not whitelisted!!!!!"
+        );
         _;
     }
 
@@ -112,17 +114,19 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
 
     // checks if user sends enough funds for minting
     modifier checkCost(uint256 cost, uint256 quantity) {
-        // if minting 10 units, 10 X the mint rate = total value to send 
+        // if minting 10 units, 10 X the mint rate = total value to send
         require(msg.value >= cost * quantity, "Not enough funds supplied");
         _;
     }
 
     // 0x0x0x0x0x0x0x0x0x0x0x0x0
-        // PUBLIC FUNCTIONS
+    // PUBLIC FUNCTIONS
     // 0x0x0x0x0x0x0x0x0x0x0x0x0
 
     // Function to generate token URI
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    function tokenURI(
+        uint256 tokenId
+    ) public view virtual override returns (string memory) {
         require(_exists(tokenId), "Token does not exist");
         return string(abi.encodePacked(_baseURI_, tokenId.toString()));
     }
@@ -137,13 +141,13 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
         MerkleRoot = root;
     }
 
-   // to take out ETH from the contract to the owner address
+    // to take out ETH from the contract to the owner address
     function withdraw() external onlyOwner nonReentrant {
         _sendFunds(address(this).balance);
     }
 
-    // internal used in withdraw function to send funds to owner 
+    // internal used in withdraw function to send funds to owner
     function _sendFunds(uint256 _totalAmount) internal {
         payable(address(owner())).transfer(_totalAmount);
-}
+    }
 }

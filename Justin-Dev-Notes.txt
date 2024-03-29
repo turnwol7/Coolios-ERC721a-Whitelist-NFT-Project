@@ -150,3 +150,10 @@ BUG FIXXED
 - it fails probably cause Foundry doesnt know what the address to the contract is in the test.
 - https://ethereum.stackexchange.com/questions/162030/foundry-erc721a-nft-merkletree-whitelist-mint-test-prank-wont-change-the-msg-s/162062#162062
 - that is my stackexchange question post
+
+Added tests
+-Main mint test is Complete
+-Added a totalSupply check inside the mint
+-Added a test_zero supply after constructor builds contract
+-added notes and cleaned up comments in project
+-taking screen shots of passing mints and tests

@@ -1,3 +1,21 @@
+/*
+March 29, 2024
+
+dependencies
+node install merkletreejs keccak256
+
+This script generates a Merkle Tree from a list of addresses 
+and prints the root hash and the proof for each address.
+
+We use these addresses and proofs through out this project.
+1. To whitelist addresses in the contract
+2. To verify the mint with proof in the mint function
+3. To apply logic on these in the contract for Permissions.
+
+Just run the script with node getmerkle.js and you can use the 
+proofs for each associated whitelist address in the contract.
+*/
+
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
 
@@ -16,14 +34,6 @@ const rootHash = merkleTree.getRoot();
 console.log('Whitelist Merkle Tree\n', merkleTree.toString());
 console.log("Root Hash: ", rootHash);
 
-//example of a claiming address
-// const claimingAddress = leafNodes[3];
-
-// const hexProof = merkleTree.getHexProof(claimingAddress);
-// console.log(hexProof);
-
-// console.log(merkleTree.verify(hexProof, claimingAddress, rootHash));
-//
 whitelistAddresses.forEach((address) => {
   const proof =  merkleTree.getHexProof(keccak256(address));
   console.log(`Address: ${address} Proof: ${proof}\n`);

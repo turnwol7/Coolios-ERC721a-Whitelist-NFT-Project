@@ -8,6 +8,7 @@ import "../lib/forge-std/src/StdCheats.sol";
 contract CooliosFuzzTest is Test {
     Coolios public coolios;
 
+    //these are 4 addresses from my Remix account
     address[] public whitelistAddresses = [
         0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,
         0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db,
@@ -15,7 +16,8 @@ contract CooliosFuzzTest is Test {
         0x617F2E2fD72FD9D5503197092aC168c91465E7f2
     ];
 
-   bytes32[][] public proofs = [
+    //proofs for the whitelist addresses generated offchain in getmerkle.js
+    bytes32[][] public proofs = [
     [
         bytes32(0x04a10bfd00977f54cc3450c9b25c9b3a502a089eba0097ba35fc33c4ea5fcb54),
         bytes32(0xda2a605bdf59a3b18e24cd0b2d9110b6ffa2340f6f67bc48214ac70e49d12770)
@@ -35,8 +37,6 @@ contract CooliosFuzzTest is Test {
 ];
 
     
-    //  CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
-
     function setUp() public {
         string memory baseURI = "https://example.com/";
         bytes32 merkleRoot = 0xfbaa96a1f7806c1ab06f957c8fc6e60875b6880254f77b71439c7854a6b47755;
@@ -64,14 +64,19 @@ contract CooliosFuzzTest is Test {
         coolios.mint{value: 100000000000000000 }(proofs[i], 1);
         //need to send funds to the contract owners address
         vm.stopPrank();
-
         }
-    }
-
-    //test that supply increased as expected
-    function test_supplyCheck() public {
+        //after the loop of 4 white list addresses have minted,
+        //supply should be 4
         uint256 supply = coolios.totalSupply();
         emit log_uint(supply);
         assertEq(supply, 4);
+    }
+
+    //test that supply is 0 after the contract is deployed
+    function test_ZeroSupply() public {
+        //test should be zero because Foundru resets functio to function
+        uint256 supply = coolios.totalSupply();
+        emit log_uint(supply);
+        assertEq(supply, 0);
     }
 }
