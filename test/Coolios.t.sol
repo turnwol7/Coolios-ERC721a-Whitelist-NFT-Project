@@ -62,7 +62,6 @@ contract CooliosFuzzTest is Test {
         emit log_address(_testAddr);
         assertEq(_testAddr, whitelistAddresses[i]);
         coolios.mint{value: 100000000000000000 }(proofs[i], 1);
-        //need to send funds to the contract owners address
         vm.stopPrank();
         }
         //after the loop of 4 white list addresses have minted,
