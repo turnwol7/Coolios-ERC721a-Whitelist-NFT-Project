@@ -1,66 +1,47 @@
-## Foundry
+# ERC721A NFT Whitelist Mint Project
+Justin Bishop
+March 29, 2024
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+The purpose of this project is to build an ERC721A NFT Whitelist project that only allows addresses on the Whitelist to mint NFT tokens.
 
-Foundry consists of:
+There was a lot of learning and troubleshooting for this project because ERC721A is not as common so information online was sparce.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Key Features
+Addresses must be whitelisted to mint  
+Addresses can not mint 2x  
+Not Whitelisted Addresses can not mint  
 
-## Documentation
+## What is a Merkle Tree?  
+The first problem to figure out was "How do I make a whitelist??". For the first 3 days of thinking about this project, I just consumed content on the internet, watched videos and read articles.
 
-https://book.getfoundry.sh/
+I found the Merkle Tree. Since writing data into contracts is expensive, a Merkle Tree allows us to hash our whitelist addresses into one single merkle root hash. We then use this root to deploy the contract. We tell th econstructor that this contract is initialized with these specific addresses which we use later in the mint funciton with the "Proofs" that we generated.
 
-## Usage
+## How the mint works
+ERC721A is known for gas optimization when minting multiple NFTs at once compared to the more expensive ERC721. This is because ERC721A updates the owner information only when the NEXT owner mints tokens further down in the mint array.
 
-### Build
+When the second owner mints, we know that the previous 0x slots must be from buyer 1. This 0x empty slot usage saves on write minting gas fees when minting multiple NFT's
 
-```shell
-$ forge build
-```
+There is a trade off though. We save on gas when we mint, but the seller will end up paying full gas if they sell later on. I guess this would be good for NFT projects where you are not sure if it will take off. So you can save costs for your community members who buy your NFT's
 
-### Test
+## Running getmerkle.js
+Run with node
+- node install merkletreejs keccak256
+- node getmerkle.js
 
-```shell
-$ forge test
-```
+## Running Tests
+install forge
+open bash terminal
+forge test -vvv
 
-### Format
+# Conclusion
+This was a very abstract project for me as I have never seen any of this before. I knew of the basics in Solidity but have never worked with contracts or testing for that matter. And also I had never heard of SHA256 hashing or merkle binary trees.
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+# Sources
+Stack Exchange (Ethereum)  
+Youtube  
+Remix  
+ERC721A (github)  
+ERC721 (github)  
+Solidty by Example  
+chatGPT
+Google

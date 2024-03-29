@@ -157,3 +157,5 @@ Added tests
 -Added a test_zero supply after constructor builds contract
 -added notes and cleaned up comments in project
 -taking screen shots of passing mints and tests
+-write readme.md
+-add screenshots for use in github readme
