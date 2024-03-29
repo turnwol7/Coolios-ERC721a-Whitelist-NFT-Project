@@ -66,7 +66,7 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
         _hasMinted[msg.sender] = true;
         //this _mint is from ERC721A with reduces gas costs
         _mint(msg.sender, quantity);
-        _sendFunds(msg.value);
+        //_sendFunds(msg.value);
     }
 
     // 0x0x0x0x0x0x0x0x0x0x0x0x0
@@ -79,10 +79,10 @@ contract Coolios is ERC721A, Ownable, ReentrancyGuard {
 
     //only used for testing the msg.sender in Coolios.t.sol
     function getMsgSenderFromCoolios() public view returns (address){
-       
     return _msgSenderERC721A();
-
     }
+
+    //testing function used to get the address of the contract
 
 
 

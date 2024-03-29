@@ -35,39 +35,43 @@ contract CooliosFuzzTest is Test {
 ];
 
     
-  //  CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
+    //  CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     function setUp() public {
         string memory baseURI = "https://example.com/";
         bytes32 merkleRoot = 0xfbaa96a1f7806c1ab06f957c8fc6e60875b6880254f77b71439c7854a6b47755;
         coolios = new Coolios(baseURI, merkleRoot);
+        address cooliosAddress = address(coolios);
+        emit log_address(cooliosAddress);
     }
 
-    //tests for the contract below
-    function testNameIsCoolios() public view {
-        assertEq(coolios.name(), "Coolios");
+    //test for the contract address
+    function test_whatIsContractAddress() public {
+        address cooliosAddress = address(coolios);
+        emit log_address(cooliosAddress);
     }
-
 
     //test for the msg.sender
     function test_MintingCoolios() public{
         for (uint256 i = 0; i < whitelistAddresses.length; i++) {
-        
-        vm.deal(whitelistAddresses[i], .5 ether);
+  
+        vm.deal(whitelistAddresses[i], 5 ether);
         vm.startPrank(whitelistAddresses[i]);
-
         address _testAddr = coolios.getMsgSenderFromCoolios(); 
-
         //assert that the address is the same as the whitelist address
+        emit log_address(_testAddr);
         assertEq(_testAddr, whitelistAddresses[i]);
-
-         
-       coolios.mint{value: 100000000000000000 }(proofs[i], 1);
-        
+        coolios.mint{value: 100000000000000000 }(proofs[i], 1);
+        //need to send funds to the contract owners address
         vm.stopPrank();
+
         }
     }
 
-
-
+    //test that supply increased as expected
+    function test_supplyCheck() public {
+        uint256 supply = coolios.totalSupply();
+        emit log_uint(supply);
+        assertEq(supply, 4);
+    }
 }

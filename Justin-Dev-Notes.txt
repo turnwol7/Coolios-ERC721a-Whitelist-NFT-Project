@@ -140,3 +140,13 @@ March 27, 28, 2024
 -partial fix
 -I made a function in the contract to  return _msgSenderERC721A() and then use that over in the test.
 -now it emits Transfer to the correct msg.sender but hits a [45] CooliosFuzzTest::fallback{value: 100000000000000000}() and reverts to fail...
+
+March 29, 2024
+-Work from home
+0x0x0x0x0x0x0x0x0x0x0
+BUG FIXXED
+0x0x00x0x0x0xx0x0x0x0
+- the reason why the testmint wasnt passing was because in the actual mint function i had _sendFunds which sends the contract the msg.value. 
+- it fails probably cause Foundry doesnt know what the address to the contract is in the test.
+- https://ethereum.stackexchange.com/questions/162030/foundry-erc721a-nft-merkletree-whitelist-mint-test-prank-wont-change-the-msg-s/162062#162062
+- that is my stackexchange question post
