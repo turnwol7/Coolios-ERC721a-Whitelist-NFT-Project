@@ -54,6 +54,7 @@ Here is one last picture of the mint reverting due to "address has already minte
 
 # Sources
 Stack Exchange (Ethereum)  
+Foundry Book  
 Youtube  
 Remix  
 ERC721A (github)  
