@@ -8,7 +8,7 @@ import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import "lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol";
 
-// ASTARIA INTERVIEW - JUSTIN BISHOP - March 19 to March 29, 2024
+// XYZ INTERVIEW - JUSTIN BISHOP - March 19 to March 29, 2024
 // This contract is a ERC721A contract that allows for the minting of tokens from a whitelist
 
 // The contract has the following features:
